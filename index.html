@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Happy 32nd Birthday Akka! 🎂🎉</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Noto+Sans+Sinhala:wght@400;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        body {
+            font-family: 'Noto Sans Sinhala', 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            touch-action: manipulation;
+        }
+
+        .font-fredoka {
+            font-family: 'Fredoka One', cursive;
+        }
+
+        .font-cursive {
+            font-family: 'Great Vibes', cursive;
+        }
+
+        /* Floating animation */
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(2deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        /* Floating balloons container */
+        .balloon-container {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .balloon {
+            position: absolute;
+            bottom: -120px;
+            width: 48px;
+            height: 66px;
+            border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+            animation: rise 9s linear infinite;
+        }
+
+        .balloon::before {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 20px;
+            width: 0;
+            height: 0;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-bottom: 10px solid inherit;
+        }
+
+        .balloon::after {
+            content: "";
+            position: absolute;
+            bottom: -20px;
+            left: 23px;
+            width: 2px;
+            height: 22px;
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        @keyframes rise {
+            0% {
+                bottom: -120px;
+                transform: translateX(0) rotate(0deg);
+            }
+            50% {
+                transform: translateX(25px) rotate(8deg);
+            }
+            100% {
+                bottom: 110vh;
+                transform: translateX(-20px) rotate(-8deg);
+            }
+        }
+
+        /* Candle flame flicker animation */
+        .candle-flame {
+            animation: flicker 0.8s ease-in-out infinite alternate;
+            transform-origin: center bottom;
+        }
+
+        @keyframes flicker {
+            0% { transform: scale(0.9) rotate(-3deg); opacity: 0.8; }
+            50% { transform: scale(1.1) rotate(3deg); opacity: 1; }
+            100% { transform: scale(0.95) rotate(-1deg); opacity: 0.9; }
+        }
+
+        /* Pulse glow animation for buttons */
+        .pulse-glow {
+            animation: pulse-glow-anim 2s infinite;
+        }
+
+        @keyframes pulse-glow-anim {
+            0% { box-shadow: 0 0 0 0 rgba(236, 72, 153, 0.6); }
+            70% { box-shadow: 0 0 0 15px rgba(236, 72, 153, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(236, 72, 153, 0); }
+        }
+
+        /* Smooth dodging behavior for No button */
+        #no-btn {
+            position: absolute;
+            transition: transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1);
+            touch-action: none;
+            will-change: transform;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center p-4 relative min-h-screen">
+
+    <div id="balloon-area" class="balloon-container hidden"></div>
+
+    <!-- ================= STAGE 1: ASK SCREEN ================= -->
+    <main id="stage1" class="w-full max-w-md bg-white/95 backdrop-blur-md rounded-3xl p-6 md:p-8 shadow-2xl text-center border-4 border-pink-300 z-20 relative animate-float my-auto">
+        <div class="mb-4">
+            <span class="text-6xl inline-block transform hover:scale-125 transition-transform duration-300">🎁</span>
+        </div>
+
+        <h1 class="text-2xl md:text-3xl font-bold text-pink-600 mb-2 leading-snug">
+            අද ඔයාගේ උපන්දිනයද අක්කේ? 🎂✨
+        </h1>
+        
+        <p class="text-gray-600 mb-8 text-sm md:text-base font-medium">
+            එහෙනම් මෙතනින් උත්තරය දීලා සප්‍රයිස් එක බලන්න! 😉
+        </p>
+
+        <!-- Button Area Container -->
+        <div id="button-area" class="relative w-full h-[180px] flex items-center justify-center overflow-hidden rounded-2xl bg-pink-50/50 border border-pink-100 p-2">
+            
+            <!-- YES BUTTON -->
+            <button id="yes-btn" onclick="goToStage2()" 
+                class="pulse-glow bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold text-lg md:text-xl px-8 py-3.5 rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-1 active:scale-95 transition-all duration-200 focus:outline-none z-10 cursor-pointer">
+                ඔව්! 🎉
+            </button>
+
+            <!-- NO BUTTON (DODGES TOUCHES & HOVER ON MOBILE/DESKTOP) -->
+            <button id="no-btn" 
+                class="bg-gray-200 active:bg-gray-300 text-gray-700 font-bold text-lg md:text-xl px-7 py-3 rounded-full shadow-md transition-all duration-150 focus:outline-none cursor-pointer">
+                නෑ 😜
+            </button>
+        </div>
+
+        <!-- Dynamic playful response message -->
+        <p id="dodge-count-text" class="text-xs md:text-sm text-pink-500 mt-4 h-6 font-bold flex items-center justify-center">
+            නෑ කියන්න බෑ නේද! 😂
+        </p>
+    </main>
+
+
+    <!-- ================= STAGE 2: CELEBRATION SCREEN ================= -->
+    <main id="stage2" class="hidden w-full max-w-2xl bg-white/95 backdrop-blur-md rounded-3xl p-6 md:p-10 shadow-2xl text-center border-4 border-pink-300 z-20 relative my-6">
+        
+        <!-- Header Tag -->
+        <div class="inline-block bg-pink-100 text-pink-600 px-4 py-1.5 rounded-full font-bold text-xs md:text-sm mb-3 tracking-wider uppercase border border-pink-200">
+            💖 Special Birthday Wish for Akka 💖
+        </div>
+
+        <!-- Title for 32nd Birthday on the 4th -->
+        <h1 class="text-3xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 mb-2 leading-tight">
+            සුබ 32 වෙනි උපන්දිනයක් වේවා අක්කේ! 🎉🎂
+        </h1>
+
+        <p class="font-semibold text-pink-500 text-base md:text-lg mb-4">
+            🗓️ මේ මාසේ 04 වෙනිදාට යෙදෙන ඔයාගේ විශේෂ දවසට...
+        </p>
+
+        <!-- SVG Birthday Cake with Candles -->
+        <div class="my-4 flex justify-center items-center">
+            <div class="relative cursor-pointer group active:scale-95 transition-transform" onclick="toggleCandle()" title="Tap to blow candles!">
+                <svg width="210" height="190" viewBox="0 0 220 200" class="filter drop-shadow-xl">
+                    <!-- Plate -->
+                    <ellipse cx="110" cy="180" rx="95" ry="15" fill="#e2e8f0" />
+                    <ellipse cx="110" cy="177" rx="85" ry="12" fill="#cbd5e1" />
+
+                    <!-- Bottom Layer -->
+                    <rect x="35" y="120" width="150" height="50" rx="10" fill="#f472b6" />
+                    <path d="M 35 120 Q 50 135 65 120 Q 80 135 95 120 Q 110 135 125 120 Q 140 135 155 120 Q 170 135 185 120 L 185 125 L 35 125 Z" fill="#fff" />
+
+                    <!-- Top Layer -->
+                    <rect x="55" y="70" width="110" height="50" rx="8" fill="#fb7185" />
+                    <path d="M 55 70 Q 68 83 82 70 Q 95 83 109 70 Q 123 83 137 70 Q 151 83 165 70 L 165 75 L 55 75 Z" fill="#fff" />
+                    
+                    <!-- Sprinkles -->
+                    <circle cx="70" cy="95" r="4" fill="#fef08a" />
+                    <circle cx="95" cy="100" r="4" fill="#a7f3d0" />
+                    <circle cx="125" cy="95" r="4" fill="#bfdbfe" />
+                    <circle cx="150" cy="100" r="4" fill="#fbcfe8" />
+
+                    <!-- Candles -->
+                    <rect x="75" y="45" width="8" height="25" fill="#60a5fa" rx="2" />
+                    <rect x="106" y="40" width="8" height="30" fill="#a7f3d0" rx="2" />
+                    <rect x="137" y="45" width="8" height="25" fill="#fbbf24" rx="2" />
+
+                    <!-- Wicks -->
+                    <line x1="79" y1="45" x2="79" y2="40" stroke="#475569" stroke-width="2" />
+                    <line x1="110" y1="40" x2="110" y2="35" stroke="#475569" stroke-width="2" />
+                    <line x1="141" y1="45" x2="141" y2="40" stroke="#475569" stroke-width="2" />
+
+                    <!-- Flames -->
+                    <g id="candle-flames">
+                        <path class="candle-flame" d="M 79 40 C 74 33, 76 25, 79 20 C 82 25, 84 33, 79 40 Z" fill="#fb923c" />
+                        <circle class="candle-flame" cx="79" cy="32" r="3" fill="#fef08a" />
+
+                        <path class="candle-flame" d="M 110 35 C 105 28, 107 20, 110 15 C 113 20, 115 28, 110 35 Z" fill="#fb923c" />
+                        <circle class="candle-flame" cx="110" cy="27" r="3" fill="#fef08a" />
+
+                        <path class="candle-flame" d="M 141 40 C 136 33, 138 25, 141 20 C 144 25, 146 33, 141 40 Z" fill="#fb923c" />
+                        <circle class="candle-flame" cx="141" cy="32" r="3" fill="#fef08a" />
+                    </g>
+                </svg>
+            </div>
+        </div>
+
+        <p class="text-xs text-pink-500 font-medium mb-5">💡 කේක් එක touch කරලා ඉටිපන්දම් නිවන්න!</p>
+
+        <!-- Main Heartfelt Wish Card -->
+        <div class="bg-gradient-to-br from-pink-50 to-rose-50 rounded-2xl p-5 md:p-6 border border-pink-200 text-gray-800 shadow-inner mb-2 space-y-3 text-left">
+            <p id="birthday-message" class="text-sm md:text-base leading-relaxed font-medium">
+                ❤️ <span class="font-bold text-pink-600">ආදරණීය අක්කේ,</span><br><br>
+                ඔයාගේ 32 වෙනි උපන්දිනය වෙනුවෙන් මුළු පවුලේ හැමෝගෙන්ම සුබම සුබ උපන්දින පණිවුඩයක්! 💐<br><br>
+                ඔයා අද අපෙන් දුර රටක හිටියත්, අපේ හිත් හැමවෙලේම ඔයා ලඟමයි තියෙන්නේ. ඔයාට නිදුක් නිරෝගී සුවය, දීර්ඝායුෂ සහ හිතන පතන හැම බලාපොරොත්තුවක්ම ඉෂ්ට වෙන සාර්ථක අනාගතයක් ප්‍රාර්ථනා කරනවා! ✨<br><br>
+                <strong>ගොඩක් පරිස්සමෙන් ඉන්න අක්කේ!</strong> අපි හැමෝම ඔයාට ගොඩක් ආදරෙයි! 💕🤗
+            </p>
+        </div>
+    </main>
+
+    <script>
+        // --- STAGE 1: MOBILE & DESKTOP DODGING NO BUTTON LOGIC ---
+        const noBtn = document.getElementById('no-btn');
+        const buttonArea = document.getElementById('button-area');
+        const dodgeCountText = document.getElementById('dodge-count-text');
+
+        let dodgeCount = 0;
+        const funnyMessages = [
+            "අයියෝ අල්ලන්න බෑ නේද! 😜",
+            "නෑ කියන්න දෙන්නේම නෑ! 😂",
+            "නැවත උත්සාහ කරන්න! 🚀",
+            "ඔව් කියන්නම වෙනවා අක්කේ! 😉",
+            "ඕන්න ආයෙත් පැන්නා! ⚡",
+            "ඔව් Button එක ඔබන්නකෝ! 🎉"
+        ];
+
+        // Move the button away safely inside the container box
+        function dodgeButton(e) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            dodgeCount++;
+            
+            const areaRect = buttonArea.getBoundingClientRect();
+            const btnWidth = noBtn.offsetWidth || 100;
+            const btnHeight = noBtn.offsetHeight || 45;
+
+            // Compute bounds within buttonArea
+            const maxX = (areaRect.width / 2) - (btnWidth / 2) - 10;
+            const maxY = (areaRect.height / 2) - (btnHeight / 2) - 10;
+
+            // Generate random positions away from center
+            let randomX = (Math.random() - 0.5) * 2 * maxX;
+            let randomY = (Math.random() - 0.5) * 2 * maxY;
+
+            // Apply translation transform
+            noBtn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+
+            // Display playful Sinhala text
+            const msgIndex = dodgeCount % funnyMessages.length;
+            dodgeCountText.innerText = funnyMessages[msgIndex];
+
+            return false;
+        }
+
+        // Attach touch & pointer events specifically optimized for mobile devices
+        noBtn.addEventListener('touchstart', dodgeButton, { passive: false });
+        noBtn.addEventListener('pointerdown', dodgeButton, { passive: false });
+        noBtn.addEventListener('mouseenter', dodgeButton);
+        noBtn.addEventListener('click', dodgeButton);
+
+        // Position 'No' button initially on right side of 'Yes' button
+        window.addEventListener('load', () => {
+            noBtn.style.transform = `translate(80px, 0px)`;
+        });
+
+
+        // --- STAGE SWITCHING & CELEBRATION ---
+        function goToStage2() {
+            document.getElementById('stage1').classList.add('hidden');
+            const stage2 = document.getElementById('stage2');
+            stage2.classList.remove('hidden');
+            stage2.classList.add('animate-float');
+
+            // Generate floating background balloons
+            createBalloons();
+
+            // Trigger initial celebration explosion
+            triggerFireworks();
+        }
+
+
+        // --- FLOATING BALLOONS GENERATOR ---
+        function createBalloons() {
+            const balloonArea = document.getElementById('balloon-area');
+            balloonArea.classList.remove('hidden');
+
+            const colors = ['#f472b6', '#60a5fa', '#34d399', '#fbbf24', '#c084fc', '#f87171'];
+
+            for (let i = 0; i < 18; i++) {
+                const balloon = document.createElement('div');
+                balloon.className = 'balloon';
+                
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                balloon.style.backgroundColor = randomColor;
+                balloon.style.left = `${Math.random() * 100}%`;
+                balloon.style.animationDuration = `${6 + Math.random() * 7}s`;
+                balloon.style.animationDelay = `${Math.random() * 4}s`;
+                
+                balloonArea.appendChild(balloon);
+            }
+        }
+
+
+        // --- CONFETTI & FIREWORKS EFFECT ---
+        function triggerFireworks() {
+            const count = 200;
+            const defaults = { origin: { y: 0.7 } };
+
+            function fire(particleRatio, opts) {
+                confetti(Object.assign({}, defaults, opts, {
+                    particleCount: Math.floor(count * particleRatio)
+                }));
+            }
+
+            fire(0.25, { spread: 30, startVelocity: 55 });
+            fire(0.2, { spread: 60 });
+            fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+            fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+            fire(0.1, { spread: 120, startVelocity: 45 });
+        }
+
+
+        // --- CANDLE BLOW / LIGHT TOGGLE ---
+        let flamesLit = true;
+        function toggleCandle() {
+            const flamesGroup = document.getElementById('candle-flames');
+            flamesLit = !flamesLit;
+            flamesGroup.style.display = flamesLit ? 'block' : 'none';
+
+            if (!flamesLit) {
+                confetti({
+                    particleCount: 70,
+                    spread: 60,
+                    origin: { y: 0.6 }
+                });
+            }
+        }
+    </script>
+</body>
+</html>
